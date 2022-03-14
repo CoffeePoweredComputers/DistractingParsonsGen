@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+/* User Defined Classes*/
+
+.container{
+    display: flex;
+}
+
+.editor{
+}
+
+.cards{
+}
