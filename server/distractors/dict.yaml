@@ -1,0 +1,54 @@
+Create:
+  Empty:
+    [
+      "{var_name} = []",
+      "{var_name} = ()"
+    ]
+  NonEmpty:
+    [
+      [":", "{var_name} = dict{{{args}}}"],
+      ["=", "{var_name} = {{{args}}}"],
+      ["=", "{var_name} = [{args}]"],
+      [":", "{var_name} = {{{args}}}"],
+      [":", "{var_name} = [{args}]"],
+      [",", "{var_name} = {{{args}}}"],
+      [",", "{var_name} = [{args}]"]
+    ]
+
+Delete:
+  # var - name of the dictionary
+  # key - the key:value pair we want to remove
+  [
+    "{var_name}.del[{key}]",
+    "{var_name}.del({key})",
+    "del {var_name}({key})",
+    "{var_name}.pop[{key}]", #type
+    "{var_name}.remove[{key}]", #attr
+    "{var_name}.remove({key})" #attr
+  ]
+
+AddChangePair:
+  [
+    "{var_name} = {{{key}, {value}}}", #assertion
+    "{var_name} = {{{key}: {value}}}", #assertion
+    "{var_name}[{value}] = {key}", #assertion
+    "{var_name}.append({key}, {value})", #attribute error
+    "{var_name}.update = {{{key}, {value}}}", #attribute error
+    "{var_name}.update[{key}, {value}]", #TypeError
+    "{var_name}.update({key})", #ValueError
+  ]
+
+Update:
+  [
+    [ ":", "{var_name} = {args}.update({var_name})"],
+    [ ":", "{var_name}.add({args})"],
+    [ ":", "{var_name} += {args}"],
+    [ ":", "{var_name} + {args}"],
+    [ ":", "{var_name}[{args}]"],
+    [ ":", "{var_name}.update([{args}])"],
+    [ ":", "{var_name}.union({args})"],
+    [ ":", "{var_name} = {var_name}.update({args})"],
+    [ ":", "{var_name} = {var_name}.update({args})"],
+    [ ":", "{var_name} = {var_name}.update({{{args}}})"],
+    [ ":", "{var_name}.update({args})"]
+  ]

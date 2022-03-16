@@ -9,6 +9,7 @@ import {
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 
 import TextEditor from "./components/TextEditor/TextEditor.jsx";
 import ParsonsBlocks from "./components/ParsonsBlocks/ParsonsBlocks.jsx";
@@ -22,7 +23,9 @@ export default class App extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			blockInfo: []
+			blockInfo: [],
+			distractorSet: [],
+			selectedDistractors: []
 		}
 	}
 
@@ -51,6 +54,40 @@ export default class App extends React.Component{
 		});
     }
 
+	getDistractors = (event) => {
+		
+		const requestParams = {
+			params : {
+				text: event.target.innerHTML,
+				type: "list",
+				operation: "append"
+			}
+		};
+		
+		axios.get('http://localhost:8000/get_distractors', requestParams)
+			.then( (response) => this.setState({
+				distractorSet: response.data
+			})
+			)
+			.catch((error) => {
+				console.error(error);
+			});
+		
+		event.preventDefault();
+	}
+
+	toggleDistractor = (event) => {
+		
+		if(this.state.selectedDistractors.includes(event.target.innerHTML)){
+			console.log("implement removing from state array");
+		} else {
+			this.setState({
+				selectedDistractors: [...this.state.selectedDistractors, event.target.innerHTML]
+			});
+		}
+		event.preventDefault();
+	}
+
 	render(){
 
 		const cards = this.state.blockInfo.map( (fields, id) => {
@@ -74,7 +111,7 @@ export default class App extends React.Component{
 					</Col>
 					<Col className = "cards">
 						<DndProvider backend={HTML5Backend}>
-							<ParsonsBlocks blockInfo={this.state.blockInfo}></ParsonsBlocks>
+							<ParsonsBlocks blockInfo={this.state.blockInfo} distractorSet={this.state.distractorSet} distractorSelector={this.getDistractors} distractorToggle={this.toggleDistractor}></ParsonsBlocks>
 						</DndProvider>
 					</Col>
 				</Row>

@@ -1,0 +1,49 @@
+Create:
+  [
+    '{set_name} = ({args})',
+    '{set_name} = [{args}]'
+  ]
+
+Add:
+  [
+    "{set1}.append({set2})",
+    "{set1}.union({set2})",
+    "{set1}.add({set2})",
+    "{set_name} = {set_name}.append({args})",
+    "{set_name} = {set_name}.add({args})",
+    "{set_name} = {set_name}.add[{args}]"
+  ]
+
+Remove:
+  # var - name of the dictionary
+  # key - the key:value pair we want to remove
+  [
+    '{set_name}.remove[{args}]',
+    'remove({set_name}, {args})',
+    'remove.{set_name}({args})',
+    '{set_name}.remove[{args}]',
+    '{set_name}.pop({args})'
+  ]
+
+# Since set.union returns a new set 
+# it could be either assign or expr
+Union:
+  Assign:
+    [
+      "{set3} = {set1} + {set2}",
+      "{set3}.intersection({set1}, {set2})",
+      "{set3}.union({set1}, {set2})",
+      "{set3} = {set1}.intersection({set2})",
+      "{set3} = {set1}.update({set2})",
+      "{set3} = {set1}.add({set2})",
+      "{set3} = union({set1}, {set2})",
+      "{set3} = {set1}.union[{set2}]",
+      "{set3} = {set1}.append({set2})"
+    ]
+  Expr:
+    [
+      "{set1}.add({set2})",
+      "union({set1}, {set2})",
+      "{set1}.union[{set2}]",
+      "{set1}.append({set2})"
+    ]

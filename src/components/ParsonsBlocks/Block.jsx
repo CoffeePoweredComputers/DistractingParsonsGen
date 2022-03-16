@@ -2,14 +2,11 @@ import React from 'react';
 import './Block.css';
 import { ItemTypes } from './Constants';
 import { useDrag } from 'react-dnd';
+import {
+    Button
+} from 'reactstrap';
 
-function getDistractors(event){
-    event.preventDefault();
-    console.log(event.target.innerHTML);
-}
-
-export default function Block ({indent, text, pos}){
-    
+export default function Block ({indent, text, pos, clickHandler}){
 
     const [{isDragging}, drag] = useDrag(() => ({
         type: ItemTypes.BLOCK,
@@ -21,7 +18,7 @@ export default function Block ({indent, text, pos}){
     return(
         <button
             ref={drag} 
-            onClick={getDistractors} 
+            onClick={clickHandler} 
             style={{
                 backgroundColor: 'grey',
                 textAlign: 'left',
