@@ -20,18 +20,12 @@ export default function Block ({indent, text, pos, clickHandler}){
             ref={drag} 
             onClick={clickHandler} 
             style={{
-                backgroundColor: 'grey',
-                textAlign: 'left',
                 opacity: isDragging ? 0.5 : 1,
-                color: 'black',
-                padding: '5px',
-                margin: '3px',
                 marginLeft: indent * 50,
-                borderRadius: '5px',
-                display: 'block'
+                width: 'calc(100% - ' + (indent * 50).toString()  + 'px)' 
             }}
         >
-        {text}
+            {text}
         </button>
     );
 

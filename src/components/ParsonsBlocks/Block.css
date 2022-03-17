@@ -1,3 +1,11 @@
-.button {
+button {
+    background-color: grey;
+    text-align: left;
     display: block;
+    color: black;
+    padding: 5px;
+    margin: 3px;
+    border-radius: 5px;
+    display: block;
+    /*width: calc(100% - 100px);*/
 }

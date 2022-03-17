@@ -6,11 +6,11 @@ import {
 	Row,
 	Col
 } from 'reactstrap';
-import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
+import OptionsMenu from "./components/OptionsMenu/OptionsMenu.jsx";
 import TextEditor from "./components/TextEditor/TextEditor.jsx";
 import ParsonsBlocks from "./components/ParsonsBlocks/ParsonsBlocks.jsx";
 import GeneratedProblem from "./components/GeneratedProblem/GeneratedProblem.jsx";
@@ -23,6 +23,9 @@ export default class App extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
+			title: "",
+			qid: "",
+			tags: [],
 			blockInfo: [],
 			distractorSet: [],
 			selectedDistractors: []
@@ -88,6 +91,30 @@ export default class App extends React.Component{
 		event.preventDefault();
 	}
 
+	setTitle = (event) => {
+		this.setState({
+			title: event.target.value.trim()
+		});
+		console.log(this.state.title);
+		event.preventDefault();
+	}
+
+	setQID = (event) => {
+		this.setState({
+			qid: event.target.value
+		});
+		console.log(this.state.qid);
+		event.preventDefault();
+	}
+
+	setTags = (event) => {
+		this.setState({
+			tags: event.target.value.split(",").map( (x) => x.trim() )
+		});
+		console.log(this.state.tags);
+		event.preventDefault();
+	}
+
 	render(){
 
 		const cards = this.state.blockInfo.map( (fields, id) => {
@@ -109,6 +136,9 @@ export default class App extends React.Component{
 					<Col className = "editor">
 						<TextEditor updateTextInfo={this.processText} ></TextEditor>
 					</Col>
+					<Col>
+						<OptionsMenu setTitle={this.setTitle} setQID={this.setQID} setTags={this.setTags}/>
+					</Col>
 					<Col className = "cards">
 						<DndProvider backend={HTML5Backend}>
 							<ParsonsBlocks blockInfo={this.state.blockInfo} distractorSet={this.state.distractorSet} distractorSelector={this.getDistractors} distractorToggle={this.toggleDistractor}></ParsonsBlocks>
@@ -118,7 +148,13 @@ export default class App extends React.Component{
 				<Row>
 					<center>
 						<h2> Generated Problem </h2>
-						<GeneratedProblem></GeneratedProblem>
+						<GeneratedProblem 
+							qid={this.state.qid} 
+							title={this.state.title} 
+							tags={this.state.tags} 
+							correct={this.state.blockInfo} 
+							distractors={this.state.selectedDistractors} 
+						/>
 					</center>
 				</Row>
 			</React.Fragment>
