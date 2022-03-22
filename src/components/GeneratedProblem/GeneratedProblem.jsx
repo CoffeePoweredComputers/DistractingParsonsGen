@@ -62,10 +62,11 @@ export default class GeneratedProblem extends Component {
                 width='1500px'
                 height='400px'
                 theme='tomorrow'
+				fontSize='10pt'
                 mode='html'
                 name='UNIQUE_ID_OF_DIV1'
-                splits={3} 
-                value={["hi", infoJson, generatedHTML]}
+                splits={2} 
+                value={[infoJson, generatedHTML]}
                 editorProps={{ $blockScrolling: true }}
             />
         );

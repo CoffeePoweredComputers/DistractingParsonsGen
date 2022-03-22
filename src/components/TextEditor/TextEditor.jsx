@@ -24,6 +24,7 @@ export default class TextEditor extends Component {
 					height='500px'
 					mode="python"
 					theme="terminal"
+                    fontSize='10pt'
 					onChange={this.processText}
 					name="UNIQUE_ID_OF_DIV2"
 					ref="aceEditor1"

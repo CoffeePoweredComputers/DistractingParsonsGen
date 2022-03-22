@@ -79,15 +79,24 @@ export default class App extends React.Component{
 		event.preventDefault();
 	}
 
-	toggleDistractor = (event) => {
+	addDistractor = (event) => {
 		
-		if(this.state.selectedDistractors.includes(event.target.innerHTML)){
-			console.log("implement removing from state array");
-		} else {
-			this.setState({
-				selectedDistractors: [...this.state.selectedDistractors, event.target.innerHTML]
-			});
-		}
+        this.setState({
+            selectedDistractors: [...this.state.selectedDistractors, event.target.innerHTML]
+        });
+
+		event.preventDefault();
+    }
+
+	removeDistractor = (event) => {
+		const blockIndex = event.target.getAttribute("pos");
+		var selectedDistractorsCopy = [ ...this.state.selectedDistractors ];
+		selectedDistractorsCopy.splice(blockIndex, 1)
+		this.setState({
+			selectedDistractors: selectedDistractorsCopy
+
+		});
+
 		event.preventDefault();
 	}
 
@@ -117,14 +126,6 @@ export default class App extends React.Component{
 
 	render(){
 
-		const cards = this.state.blockInfo.map( (fields, id) => {
-			return (
-				<React.Fragment>
-					<li><b> {fields.indent}, {fields.text}, {fields.position} </b></li>
-				</React.Fragment>
-			);
-		});
-
 		return (
 			<React.Fragment>
 				<Navbar color="dark" dark expand="md" light >
@@ -132,20 +133,29 @@ export default class App extends React.Component{
 						Parson's Problem: Automatic Distractor Gen
 					</NavbarBrand>
 				</Navbar>
-				<Row>
-					<Col className = "editor">
-						<TextEditor updateTextInfo={this.processText} ></TextEditor>
+				<Row className="bg-light border">
+					<Col className="editor">
+                        <TextEditor updateTextInfo={this.processText} />
 					</Col>
 					<Col>
-						<OptionsMenu setTitle={this.setTitle} setQID={this.setQID} setTags={this.setTags}/>
+                        <OptionsMenu 
+                            setTitle={this.setTitle} 
+                            setQID={this.setQID} 
+                            setTags={this.setTags}
+                        />
 					</Col>
-					<Col className = "cards">
-						<DndProvider backend={HTML5Backend}>
-							<ParsonsBlocks blockInfo={this.state.blockInfo} distractorSet={this.state.distractorSet} distractorSelector={this.getDistractors} distractorToggle={this.toggleDistractor}></ParsonsBlocks>
-						</DndProvider>
-					</Col>
+					<DndProvider backend={HTML5Backend}>
+						<ParsonsBlocks 
+							blockInfo={this.state.blockInfo} 
+							distractorSet={this.state.distractorSet} 
+							selectedDistractors={this.state.selectedDistractors} 
+							distractorSelector={this.getDistractors} 
+							addDistractor={this.addDistractor}
+							removeDistractor={this.removeDistractor}
+						/>
+					</DndProvider>
 				</Row>
-				<Row>
+				<Row className="bg-light border">
 					<center>
 						<h2> Generated Problem </h2>
 						<GeneratedProblem 
