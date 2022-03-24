@@ -24,6 +24,7 @@ export default class App extends React.Component{
 		super(props);
 		this.state = {
 			title: "",
+			topic: "",
 			qid: "",
 			tags: [],
 			blockInfo: [],
@@ -104,7 +105,13 @@ export default class App extends React.Component{
 		this.setState({
 			title: event.target.value.trim()
 		});
-		console.log(this.state.title);
+		event.preventDefault();
+	}
+
+	setTopic = (event) => {
+		this.setState({
+			topic: event.target.value.trim()
+		});
 		event.preventDefault();
 	}
 
@@ -112,7 +119,6 @@ export default class App extends React.Component{
 		this.setState({
 			qid: event.target.value
 		});
-		console.log(this.state.qid);
 		event.preventDefault();
 	}
 
@@ -120,7 +126,6 @@ export default class App extends React.Component{
 		this.setState({
 			tags: event.target.value.split(",").map( (x) => x.trim() )
 		});
-		console.log(this.state.tags);
 		event.preventDefault();
 	}
 
@@ -140,6 +145,7 @@ export default class App extends React.Component{
 					<Col>
                         <OptionsMenu 
                             setTitle={this.setTitle} 
+                            setTopic={this.setTopic} 
                             setQID={this.setQID} 
                             setTags={this.setTags}
                         />
@@ -161,6 +167,7 @@ export default class App extends React.Component{
 						<GeneratedProblem 
 							qid={this.state.qid} 
 							title={this.state.title} 
+							topic={this.state.topic}
 							tags={this.state.tags} 
 							correct={this.state.blockInfo} 
 							distractors={this.state.selectedDistractors} 

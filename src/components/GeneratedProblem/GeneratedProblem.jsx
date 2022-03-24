@@ -13,6 +13,17 @@ import "ace-builds/src-noconflict/theme-xcode";
 import "ace-builds/src-noconflict/theme-terminal";
 
 export default class GeneratedProblem extends Component {
+
+	constructor(props){
+		super(props)
+		this.state = {
+			uuid: uuid()
+		}
+	}
+
+	downloadContents = () => {}
+
+
     // Render editor
     render(){
 
@@ -20,9 +31,9 @@ export default class GeneratedProblem extends Component {
 
         //Generate the info.json
 		const infoJson= JSON.stringify({
-			uuid: uuid(),
+			uuid: this.state.uuid,
 			title: this.props.title,
-			topic: "topic",
+			topic: this.props.topic,
 			tags: this.props.tags,
 			singleVariant: true,
 			type: "v3"
@@ -58,17 +69,25 @@ export default class GeneratedProblem extends Component {
         const generatedHTML = "<pl-parsons-blocks answers-name=\"answers\" indentation=true grading-method=\"ranking\">\n"  + correct + "\n" + distractors + "\n</pl-parsons-blocks>"
 
         return(
-            <SplitEditor
-                width='1500px'
-                height='400px'
-                theme='tomorrow'
-				fontSize='10pt'
-                mode='html'
-                name='UNIQUE_ID_OF_DIV1'
-                splits={2} 
-                value={[infoJson, generatedHTML]}
-                editorProps={{ $blockScrolling: true }}
-            />
+			<React.Fragment>
+				<SplitEditor
+					width='1500px'
+					height='400px'
+					theme='tomorrow'
+					fontSize='10pt'
+					mode='html'
+					name='UNIQUE_ID_OF_DIV1'
+					splits={2} 
+					value={[infoJson, generatedHTML]}
+					editorProps={{ $blockScrolling: true }}
+				/>
+				<button
+					id='downloadContent'
+					onClick={this.downloadContents} 
+					>
+					Download ZIP
+				</button>
+			</React.Fragment>
         );
     }
 }
