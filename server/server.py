@@ -53,7 +53,7 @@ def get_distractors():
 @cross_origin(methods=["GET"])
 def match_distractor():
     r_text = request.args.get("text")
-    return {"matchFound": True}
+    return {"matchFound": "append" in r_text}
 
 
 if __name__ == "__main__":
