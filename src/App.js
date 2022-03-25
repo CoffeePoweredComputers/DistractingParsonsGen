@@ -33,21 +33,41 @@ export default class App extends React.Component{
 		}
 	}
 
-    processText = (newValue) => {
+	matchDistractor = async (line) => {
+
+		const requestParams = {
+			params : {
+				text: line
+			}
+		};
+
+		return await axios.get('http://localhost:8000/match_distractor', requestParams)
+			.then( (response) => response.data.matchFound );
+			//.catch((error) => {
+			//	console.error(error);
+			//});
+		
+	}
+
+
+    processText = async (newValue) => {
         var blocks = [];
 		const lines = newValue.split('\n');
 		for(var i = 0; i < lines.length; i++){
 
 			const spaces = lines[i].search(/\S/);
+			lines[i] += (i < lines.length - 1) ? '\n' : '';
 			if(spaces < 0){
 				continue;
 			} 
 
 			const indent_level = Math.floor(spaces/4);
+			const distractorMatched = (lines[i].endsWith('\n')) ? (await this.matchDistractor(lines[i].trim())) : false;
 			const data = {
 					text: lines[i].trim(),
 					indent: indent_level,
-					position: blocks.length + 1
+					position: blocks.length + 1,
+					color:  distractorMatched ? 'darkgreen' : 'grey',
 					}
 
 			blocks.push(data);

@@ -6,7 +6,7 @@ import {
     Button
 } from 'reactstrap';
 
-export default function Block ({type, indent, text, pos, clickHandler}){
+export default function Block ({type, color, indent, text, pos, clickHandler}){
 
     const [{isDragging}, drag] = useDrag(() => ({
         type: ItemTypes.BLOCK,
@@ -24,6 +24,7 @@ export default function Block ({type, indent, text, pos, clickHandler}){
             ref={drag} 
             onClick={clickHandler} 
             style={{
+                backgroundColor: color,
                 opacity: isDragging ? 0.5 : 1,
                 marginLeft: indent * 50,
                 width: 'calc(100% - ' + (indent * 50).toString()  + 'px)' 

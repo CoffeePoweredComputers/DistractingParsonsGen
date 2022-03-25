@@ -11,6 +11,8 @@ import axios from 'axios';
  * Your Component
  */
 export default class ParsonsBlocks extends Component {
+
+
 	
     // Render editor
     render(){
@@ -21,6 +23,7 @@ export default class ParsonsBlocks extends Component {
 				<React.Fragment>
                     <Block 
 						type="codeBlock"
+						color={fields.color}
                         indent={fields.indent} 
                         text={fields.text}
                         pos={fields.position}
@@ -35,6 +38,7 @@ export default class ParsonsBlocks extends Component {
 				<React.Fragment>
                     <Block 
 						type="distractorOption"
+						color='grey'
 						indent={0} 
 						text={fields.text} 
 						pos={i}
@@ -49,6 +53,7 @@ export default class ParsonsBlocks extends Component {
 				<React.Fragment>
                     <Block 
 						type="distractorSelected"
+						color='grey'
                         indent={0} 
                         text={text} 
 						pos={i}

@@ -49,6 +49,11 @@ def get_distractors():
         for distractor in distractors
         ]).encode("utf-8")
 
+@app.route("/match_distractor")
+@cross_origin(methods=["GET"])
+def match_distractor():
+    r_text = request.args.get("text")
+    return {"matchFound": True}
 
 
 if __name__ == "__main__":
