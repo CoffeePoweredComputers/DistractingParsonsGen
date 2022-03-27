@@ -13,8 +13,6 @@ class FunctionTransformer(st.Transformer):
         self.transform_functions = {
             "def": self.def_transform
         }
-
-
         
     def gen_distractor(self, node: ast.FunctionDef, op: str) -> list:
         """ Calls the function associated with the op on the given node """
@@ -44,7 +42,6 @@ class FunctionTransformer(st.Transformer):
         ]
 
         return non_default_args, default_args, arb, kwarb
-
 
     def def_transform(self, node: ast.FunctionDef) -> str:
 

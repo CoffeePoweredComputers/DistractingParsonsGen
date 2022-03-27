@@ -23,35 +23,6 @@ class DistractorGen():
             "forloop": ForLoop.ForLoopTransformer() 
         }
 
-
-    #def gen_info_json(self, output_dir: str, qid: str) -> None:
-    #    """
-    #    This function asks the user for all relevant info so it can generate an info.json
-    #    file for use on PrairieLearn
-    #    """
-
-    #    def get_tags() -> list:
-
-    #        tags = [] 
-    #        while tag := input("Enter a tag or just press enter to quit:"):
-    #            if tag == "":
-    #                break
-    #            tags.append(tag)
-    #        return tags
-    #        
-    #    info = {
-    #        "uuid": str(uuid.uuid4()),
-    #        "title": input("Enter a title: "),
-    #        "topic": input("Enter a topic: "),
-    #        "tags": get_tags(),
-    #        "singleVariant": True if input("single variant (t/f)? ") == "t" else False,
-    #        "type": "v3"
-    #    }
-
-    #    with open(os.path.join(argv[2], qid, "info.json"), "w") as outstream:
-    #        json.dump(info, outstream, indent=4)
-
-
     def gen_distractor_block(self, node: str, t, op):
 
         try:

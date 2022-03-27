@@ -1,6 +1,6 @@
 import ast
 
-class Visitor(ast.NodeVisitor):
+class Matcher(ast.NodeVisitor):
 
     def match_operation(self, node):
 
@@ -14,7 +14,7 @@ class Visitor(ast.NodeVisitor):
                             attr='count',
                             ctx=ast.Load()),
                         args=[_])):
-                print("Matched count assignment")
+                return "Matched count assignment"
 
             case ast.Expr(
                     value=ast.Call(
@@ -22,7 +22,7 @@ class Visitor(ast.NodeVisitor):
                             value=ast.Name(),
                             attr='count'),
                         args=[_])):
-                print("Matched count expression")
+                return "Matched count expression"
 
             case ast.Expr(
                     value=ast.Call(
@@ -31,7 +31,7 @@ class Visitor(ast.NodeVisitor):
                             attr='append',
                             ctx=ast.Load()),
                         args=[_])):
-                print("Matched append expresion")
+                return "Matched append expresion"
 
             case ast.Expr(
                     value=ast.Call(
