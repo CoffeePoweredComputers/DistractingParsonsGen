@@ -1,5 +1,6 @@
 {
   "name": "parsons-autogen-webtool",
+  "homepage": "https://hamiltonfour.tech/parsons_autogen",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
