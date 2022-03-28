@@ -14,7 +14,8 @@ class Matcher(ast.NodeVisitor):
                             attr='count',
                             ctx=ast.Load()),
                         args=[_])):
-                return "Matched count assignment"
+
+                return "collection_func", "count"
 
             case ast.Expr(
                     value=ast.Call(
@@ -22,7 +23,8 @@ class Matcher(ast.NodeVisitor):
                             value=ast.Name(),
                             attr='count'),
                         args=[_])):
-                return "Matched count expression"
+
+                return "collection_func", "count"
 
             case ast.Expr(
                     value=ast.Call(
@@ -31,7 +33,8 @@ class Matcher(ast.NodeVisitor):
                             attr='append',
                             ctx=ast.Load()),
                         args=[_])):
-                return "Matched append expresion"
+
+                return "collection_func", "append"
 
             case ast.Expr(
                     value=ast.Call(
@@ -40,27 +43,28 @@ class Matcher(ast.NodeVisitor):
                             attr='extend',
                             ctx=ast.Load()),
                         args=[_])):
-                print("Matched extend expresion")
+
+                return "collection_func", "extend"
             
             case _:
                 print("no match")
 
 
 
-def main():
-    v = Visitor()
-    lines = [
-        "z = x.count([1, 2, 3, {1, 2 ,3} ])",
-        "test = x.count(5)",
-        "x.count(5)",
-        "lst.append(z)",
-        "lst.append(y)",
-        "lst.extend([1, 2, 3])"
-    ]
-    for line in lines:
-        line = ast.parse(line.strip()).body[0]
-        #print(ast.dump(line, indent=4))
-        v.match_operation(line)
-
-if __name__ == "__main__":
-    main()
+#def main():
+#    v = Visitor()
+#    lines = [
+#        "z = x.count([1, 2, 3, {1, 2 ,3} ])",
+#        "test = x.count(5)",
+#        "x.count(5)",
+#        "lst.append(z)",
+#        "lst.append(y)",
+#        "lst.extend([1, 2, 3])"
+#    ]
+#    for line in lines:
+#        line = ast.parse(line.strip()).body[0]
+#        #print(ast.dump(line, indent=4))
+#        v.match_operation(line)
+#
+#if __name__ == "__main__":
+#    main()

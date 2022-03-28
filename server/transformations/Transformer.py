@@ -1,6 +1,6 @@
 import os
 import yaml
-from Matcher import Matcher
+
 
 class Transformer:
 
@@ -19,8 +19,3 @@ class Transformer:
             distractor_template.format(**kwargs)
             for distractor_template in distractor_templates
         ]
-
-    def 
-
-
-    def match(self, node)

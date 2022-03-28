@@ -42,10 +42,10 @@ export default class App extends React.Component{
 		};
 
 		return await axios.get('http://localhost:8000/match_distractor', requestParams)
-			.then( (response) => response.data.matchFound );
-			//.catch((error) => {
-			//	console.error(error);
-			//});
+			.then( (response) => response.data )
+			.catch((error) => {
+				console.error(error);
+			});
 		
 	}
 
@@ -62,12 +62,15 @@ export default class App extends React.Component{
 			} 
 
 			const indent_level = Math.floor(spaces/4);
-			const distractorMatched = (lines[i].endsWith('\n')) ? (await this.matchDistractor(lines[i].trim())) : false;
+            const distractorData = await this.matchDistractor(lines[i].trim());
+            console.log(distractorData);
 			const data = {
-					text: lines[i].trim(),
+                    text: lines[i].trim(),
+                    op: distractorData.op,
+                    type: distractorData.type,
 					indent: indent_level,
 					position: blocks.length + 1,
-					color:  distractorMatched ? 'darkgreen' : 'grey',
+                    color:  distractorData.matchFound ? 'darkgreen' : 'grey',
 					}
 
 			blocks.push(data);
@@ -79,12 +82,13 @@ export default class App extends React.Component{
     }
 
 	getDistractors = (event) => {
-		
+
+        console.log(event);
 		const requestParams = {
 			params : {
 				text: event.target.innerHTML,
-				type: "list",
-				operation: "append"
+				type: event.target.getAttribute("group"),
+                operation: event.target.getAttribute("op")
 			}
 		};
 		

@@ -10,19 +10,20 @@ import yaml
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 
-from transformations import Lists
-from transformations import FunctionDef
-from transformations import ForLoop
-from transformations import Dicts
-from transformations import Sets
+from transformations import Matcher
+from transformations import CollectionFuncs
 
+#from transformations import Lists
+#from transformations import FunctionDef
+#from transformations import ForLoop
+#from transformations import Dicts
+#from transformations import Sets
+#
 transformer_functions = {
-    "set": Sets.SetTransformer(),
-    "list": Lists.ListTransformer(),
-    "dict": Dicts.DictTransformer(),
-    "function": FunctionDef.FunctionTransformer(),
-    "forloop": ForLoop.ForLoopTransformer() 
+    "collection_func": CollectionFuncs.CollectionFuncsTransformations()
 }
+
+MATCHER = Matcher.Matcher()
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -52,8 +53,19 @@ def get_distractors():
 @app.route("/match_distractor")
 @cross_origin(methods=["GET"])
 def match_distractor():
+
     r_text = request.args.get("text")
-    return {"matchFound": "append" in r_text}
+    try:
+        node = ast.parse(r_text.strip()).body[0]
+        result = MATCHER.match_operation(node)
+    except Exception:
+        result = None
+
+    return {
+        "matchFound": result is not None,
+        "type": result[0] if result else None,
+        "op": result[1] if result else None
+        }
 
 
 if __name__ == "__main__":

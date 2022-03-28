@@ -26,6 +26,8 @@ export default class ParsonsBlocks extends Component {
 						color={fields.color}
                         indent={fields.indent} 
                         text={fields.text}
+                        op={fields.op}
+                        group={fields.type}
                         pos={fields.position}
                         clickHandler={this.props.distractorSelector} 
                     /> 
