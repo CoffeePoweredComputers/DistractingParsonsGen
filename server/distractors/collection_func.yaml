@@ -19,9 +19,16 @@ Extend:
     '{lst_name}.extend([{args}])',
     '{lst_name}.add({args})'
   ]
-Count:
+CountExpr:
   [
-    '{count_elem} = {lst_name}.count("{elem}")',
+    '{lst_name}.count({elem})',
+    '{lst_name}.count[{elem}]',
+    'len({lst_name}.count({elem}))',
+    '{lst_name}.len({elem})',
+    '{lst_name}({elem})'
+  ]
+CountAssign:
+  [
     '{count_elem} = {lst_name}.count({elem})',
     '{lst_name}.count({elem})',
     '{count_elem} = {lst_name}.count[{elem}]',

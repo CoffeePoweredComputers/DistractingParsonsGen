@@ -118,49 +118,28 @@ class CollectionFuncsTransformations(st.Transformer):
 
         return self.format_distractors(distractor_templates, **kwargs)
 
-    def count_transform(self, node: ast.Expr) -> list:
+    def count_transform(self, node: ast.Expr | ast.Assign) -> list:
         """[summary]
 
         Args:
-            statement (ast.Assign): 
-
-            Literal Example:
-            Assign(
-                targets=[
-                    Name(id='x', ctx=Store())],
-                value=Call(
-                    func=Attribute(
-                        value=Name(id='y', ctx=Load()),
-                        attr='count',
-                        ctx=Load()),
-                    args=[
-                        Constant(value=5)],
-                    keywords=[]))
-
-           Var Example:
-           Assign(
-                targets=[
-                    Name(id='x', ctx=Store())],
-                value=Call(
-                    func=Attribute(
-                        value=Name(id='y', ctx=Load()),
-                        attr='count',
-                        ctx=Load()),
-                    args=[
-                        Name(id='z', ctx=Load())],
-                    keywords=[])) 
-
         Returns:
             list: [description]
         """
+        print(type(node) is ast.Expr)
+        if type(node) is ast.Assign:
+            distractor_templates = self.distractors["CountAssign"]
+            kwargs = {
+                "count_elem": node.targets[0].id,
+                "lst_name": node.value.func.value.id,
+                "elem": ast.unparse(node.value.args[0]),
+            }
+        elif type(node) is ast.Expr:
+            distractor_templates = self.distractors["CountExpr"]
+            kwargs = {
+                "lst_name": node.value.func.value.id,
+                "elem": ast.unparse(node.value.args[0]),
+            }
 
-        distractor_templates = self.distractors["Count"]
-        print(ast.dump(node, indent=4))
-        kwargs = {
-            "count_elem": node.targets[0].id,
-            "lst_name": node.value.func.value.id,
-            "elem": ast.unparse(node.value.args[0]),
-        }
 
         return self.format_distractors(distractor_templates, **kwargs)
 
@@ -168,31 +147,6 @@ class CollectionFuncsTransformations(st.Transformer):
         """[summary]
 
         Args:
-            statement (ast.Assign or ast.Expr): 
-
-            Assign:
-                Assign(
-                    targets=[
-                        Name(id='x', ctx=Store())],
-                    value=Call(
-                        func=Attribute(
-                            value=Name(id='y', ctx=Load()),
-                            attr='pop',
-                            ctx=Load()),
-                        args=[
-                            Constant(value=4)],
-                        keywords=[]))
-
-            Expr:
-                Expr(
-                    value=Call(
-                        func=Attribute(
-                            value=Name(id='y', ctx=Load()),
-                            attr='pop',
-                            ctx=Load()),
-                        args=[
-                            Constant(value=4)],
-                        keywords=[]))
 
         Returns:
             list: [description]
@@ -221,17 +175,6 @@ class CollectionFuncsTransformations(st.Transformer):
         """[summary]
 
         Args:
-            node (ast.Expr): 
-            Expr(
-                value=Call(
-                    func=Attribute(
-                        value=Name(id='x', ctx=Load()),
-                        attr='insert',
-                        ctx=Load()),
-                    args=[
-                        Constant(value=1),
-                        Constant(value='hello')],
-                    keywords=[]))
 
         Returns:
             list: [description]
@@ -271,17 +214,6 @@ class CollectionFuncsTransformations(st.Transformer):
         """[summary]
 
         Args:
-            node (ast.Assign):
-            Assign(
-                targets=[
-                    Name(id='x', ctx=Store())],
-                value=Dict(
-                    keys=[
-                        Constant(value='hi'),
-                        Constant(value='world')],
-                    values=[
-                        Constant(value=5),
-                        Constant(value=10)]))
         """
 
         distractor_templates = self.distractors["DictCreate"]
@@ -306,12 +238,6 @@ class CollectionFuncsTransformations(st.Transformer):
             node (ast.Delete): [description]
 
         Returns:
-            node: Delete(
-                    targets=[
-                        Subscript(
-                            value=Name(id='x', ctx=Load()),
-                            slice=Constant(value='hi'),
-                            ctx=Del())])
         """
 
         distractor_templates = self.distractors["Delete"]
@@ -329,13 +255,6 @@ class CollectionFuncsTransformations(st.Transformer):
 
         Args:
             node (ast.Assign): 
-            Assign(
-                targets=[
-                    Subscript(
-                        value=Name(id='x', ctx=Load()),
-                        slice=Constant(value=0),
-                        ctx=Store())],
-                value=Constant(value=5))
         """
 
 
@@ -355,31 +274,6 @@ class CollectionFuncsTransformations(st.Transformer):
         Args:
             node (ast.Expr): 
 
-            structure for literal:
-            Expr(
-                value=Call(
-                    func=Attribute(
-                        value=Name(id='x', ctx=Load()),
-                        attr='update',
-                        ctx=Load()),
-                    args=[
-                        Dict(
-                            keys=[
-                                Constant(value='hi')],
-                            values=[
-                                Constant(value=4)])],
-                    keywords=[]))
-
-            structure for value:
-            Expr(
-                value=Call(
-                    func=Attribute(
-                        value=Name(id='x', ctx=Load()),
-                        attr='update',
-                        ctx=Load()),
-                    args=[
-                        Name(id='y', ctx=Load())],
-                    keywords=[]))
         """
 
         distractor_templates = self.distractors["Update"]
@@ -436,16 +330,6 @@ class CollectionFuncsTransformations(st.Transformer):
         """[summary]
 
         Args:
-            node (ast.Expr): 
-                Expr(
-                    value=Call(
-                        func=Attribute(
-                            value=Name(id='x', ctx=Load()),
-                            attr='add',
-                            ctx=Load()),
-                        args=[
-                            Constant(value=4)],
-                        keywords=[]))
 
         Returns:
             list: 
@@ -465,15 +349,6 @@ class CollectionFuncsTransformations(st.Transformer):
 
         Args:
             node (ast.Expr): 
-            Expr(
-                value=Call(
-                    func=Attribute(
-                        value=Name(id='x', ctx=Load()),
-                        attr='remove',
-                        ctx=Load()),
-                    args=[
-                        Name(id='y', ctx=Load())],
-                    keywords=[]))
 
         Returns:
             list: [description]
@@ -562,15 +437,6 @@ class CollectionFuncsTransformations(st.Transformer):
 
         Args:
             node (ast.Expr): 
-                Expr(
-                    value=Call(
-                        func=Attribute(
-                            value=Name(id='x', ctx=Load()),
-                            attr='add',
-                            ctx=Load()),
-                        args=[
-                            Constant(value=4)],
-                        keywords=[]))
 
         Returns:
             list: 
@@ -590,15 +456,6 @@ class CollectionFuncsTransformations(st.Transformer):
 
         Args:
             node (ast.Expr): 
-            Expr(
-                value=Call(
-                    func=Attribute(
-                        value=Name(id='x', ctx=Load()),
-                        attr='remove',
-                        ctx=Load()),
-                    args=[
-                        Name(id='y', ctx=Load())],
-                    keywords=[]))
 
         Returns:
             list: [description]
