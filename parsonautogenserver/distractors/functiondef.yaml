@@ -1,0 +1,13 @@
+Def : 
+  [
+    "{func_name}({args})",
+    "{func_name}({args}):",
+    "def {func_name}({args})",
+  ]
+
+Args :
+  [
+    "def {func_name}({non_default_args}{default_args}{arb}{kwarb})",
+    "def {func_name}({default_args}{non_default_args}{arb}{kwarb}):",
+    "def {func_name}({default_args}{non_default_args}{kwarb}{arb}):"
+  ]
