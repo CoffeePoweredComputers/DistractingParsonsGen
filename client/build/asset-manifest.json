@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/parsons_autogen/static/css/main.c07288c4.css",
+    "main.js": "/parsons_autogen/static/js/main.3b223a76.js",
+    "static/js/787.4da2c7d7.chunk.js": "/parsons_autogen/static/js/787.4da2c7d7.chunk.js",
+    "index.html": "/parsons_autogen/index.html",
+    "main.c07288c4.css.map": "/parsons_autogen/static/css/main.c07288c4.css.map",
+    "main.3b223a76.js.map": "/parsons_autogen/static/js/main.3b223a76.js.map",
+    "787.4da2c7d7.chunk.js.map": "/parsons_autogen/static/js/787.4da2c7d7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c07288c4.css",
+    "static/js/main.3b223a76.js"
+  ]
+}
