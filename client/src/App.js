@@ -41,7 +41,7 @@ export default class App extends React.Component{
 			}
 		};
 
-		return await axios.get('http://localhost:8000/match_distractor', requestParams)
+		return await axios.get('http://18.189.184.37:80/match_distractor', requestParams)
 			.then( (response) => response.data.matchFound );
 			//.catch((error) => {
 			//	console.error(error);
@@ -88,7 +88,7 @@ export default class App extends React.Component{
 			}
 		};
 		
-		axios.get('http://localhost:8000/get_distractors', requestParams)
+		axios.get('http://18.189.184.37:80/get_distractors', requestParams)
 			.then( (response) => this.setState({
 				distractorSet: response.data
 			})
