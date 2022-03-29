@@ -48,30 +48,30 @@ Index:
 Pop:
   Expr:
     [
-      '{list_name}.pop[{param}]',
-      'pop({list_name}, {param})',
-      'pop.list_name({param})',
-      '{list_name}.remove[{param}]',
-      '{list_name}.remove({param})'
+      '{collection_name}.pop[{param}]',
+      'pop({collection_name}, {param})',
+      'pop.collection_name({param})',
+      '{collection_name}.remove[{param}]',
+      '{collection_name}.remove({param})'
     ]
   Assign:
     # TODO: finish adding a few more
     [
-      '{list_name} = {list_name}.pop[{args}]',
-      '{list_name} = pop({list_name}, {args})',
-      '{list_name} = pop.list_name({args})',
-      '{list_name} = {list_name}.remove[{args}]',
-      '{list_name} = {list_name}.remove({args})'
+      '{elem_name} = {collection_name}.pop[{param}]',
+      '{elem_name} = pop({collection_name}, {param})',
+      '{elem_name} = pop.{collection_name}({param})',
+      '{elem_name} = {collection_name}.remove[{param}]',
+      '{elem_name} = {collection_name}.remove({param})'
     ]
 
 Remove:
   # TODO: finish adding a few more
   [
-    '{list_name}.remove[{args}]',
-    'remove({list_name}, {args})',
-    'remove.{list_name}({args})',
-    '{list_name}.remove[{args}]',
-    '{list_name}.pop({args})'
+    '{collection_name}.remove[{args}]',
+    'remove({collection_name}, {args})',
+    'remove.{collection_name}({args})',
+    '{collection_name}.remove[{args}]',
+    '{collection_name}.pop({args})'
   ]
 
 Insert:

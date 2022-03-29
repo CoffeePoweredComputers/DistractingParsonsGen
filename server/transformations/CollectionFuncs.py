@@ -155,18 +155,18 @@ class CollectionFuncsTransformations(st.Transformer):
         if type(node) is ast.Assign:
             distractor_templates = self.distractors["Pop"]["Assign"]
             kwargs = {
-                "count_var": node.targets[0].id,
-                "list_name": node.value.func.value.id,
+                "elem_name": node.targets[0].id,
+                "collection_name": node.value.func.value.id,
                 "param": ast.unparse(node.value.args[0]),
             }
         elif type(node) is ast.Expr:
             distractor_templates = self.distractors["Pop"]["Expr"]
             kwargs = {
-                "list_name": node.value.func.value.id,
+                "collection_name": node.value.func.value.id,
                 "param": ast.unparse(node.value.args[0]),
             }
         else:
-            raise ValueError("")
+            raise ValueError("{ast.unparse(node)} is not a valid formation of the pop statement/expression")
 
         return self.format_distractors(distractor_templates, **kwargs)
 
@@ -203,7 +203,7 @@ class CollectionFuncsTransformations(st.Transformer):
         distractor_templates = self.distractors["Remove"]
 
         kwargs = {
-            "list_name": node.value.func.value.id,
+            "collection_name": node.value.func.value.id,
             "args": ast.unparse(node.value.args)
         }
 

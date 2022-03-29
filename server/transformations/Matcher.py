@@ -11,32 +11,31 @@ class Matcher(ast.NodeVisitor):
             #######################
 
             # {1, 2, 3, 4}
-            case :
-
+            case False:
                 return "collection_func", "set_literal"
 
             # [1, 2, 3, 4]
-            case :
+            case False:
 
                 return "collection_func", "list_literal"
 
             # s = {key1: val1, key2: val2}
-            case :
+            case False:
 
                 return "collection_func", "dict_literal"
 
             # s = {1, 2, 3, 4}
-            case :
+            case False:
 
                 return "collection_func", "set_create"
 
             # s = [1, 2, 3, 4]
-            case :
+            case False:
 
                 return "collection_func", "list_create"
 
             # s = {key1: val1, key2: val2}
-            case :
+            case False:
 
                 return "collection_func", "dict_create"
 
@@ -44,7 +43,7 @@ class Matcher(ast.NodeVisitor):
             # collection _func #
             ####################
 
-            # result = lst.count(elem)
+            # result = sequence.count(elem)
             case ast.Assign(
                     targets=[
                         ast.Name()],
@@ -57,7 +56,7 @@ class Matcher(ast.NodeVisitor):
 
                 return "collection_func", "count"
 
-            # lst.count(elem)
+            # sequence.count(elem)
             case ast.Expr(
                     value=ast.Call(
                         func=ast.Attribute(
@@ -89,29 +88,92 @@ class Matcher(ast.NodeVisitor):
 
                 return "collection_func", "extend"
 
-            # 
-            case:
+            # collection.pop(x)
+            case ast.Expr(
+                value=ast.Call(
+                    func=ast.Attribute(
+                        value=ast.Name(),
+                        attr='pop',
+                        ctx=ast.Load()),
+                    args=[_])):
+                return "collection_func", "pop"
+
+            # res = collection.pop(x)
+            case ast.Assign(
+                targets=[ast.Name()],
+                value=ast.Call(
+                    func=ast.Attribute(
+                        value=ast.Name(),
+                        attr='pop',
+                        ctx=ast.Load()),
+                    args=[_])):
+                return "collection_func", "pop"
+
+            # collection.remove(x)
+            case ast.Expr(
+                value=ast.Call(
+                    func=ast.Attribute(
+                        value=ast.Name(),
+                        attr='remove',
+                        ctx=ast.Load()),
+                    args=[_])):
+                return "collection_func", "remove"
+
+            # i = collection.index(elem)
+            case ast.Assign(
+                targets=[
+                    ast.Name()],
+                value=ast.Call(
+                    func=ast.Attribute(
+                        value=ast.Name(),
+                        attr='index',
+                        ctx=ast.Load()),
+                    args=[_])):
+                return "collection_func", "index"
+
+            # collection.index(elem)
+            case ast.Expr(
+                value=ast.Call(
+                    func=ast.Attribute(
+                        value=ast.Name(),
+                        attr='index',
+                        ctx=ast.Load()),
+                    args=[_])):
+                return "collection_func", "index"
+
+            # lst.insert(i, elem)
+            case ast.Expr(
+                value=ast.Call(
+                    func=ast.Attribute(
+                        value=ast.Name(),
+                        attr='insert',
+                        ctx=ast.Load()),
+                    args=[_, _])):
+                return "collection_func", "insert"
+
+            # c1.update(c2)
+            case ast.Expr(
+                value=ast.Call(
+                    func=ast.Attribute(
+                        value=ast.Name(),
+                        attr='update',
+                        ctx=ast.Load()),
+                    args=[_])):
+                return "collection_func", "update"
+
+
 
             # 
-            case:
+            case False:
+                pass
 
             # 
-            case:
+            case False:
+                pass
 
             # 
-            case:
-
-            # 
-            case:
-
-            # 
-            case:
-
-            # 
-            case:
-
-            # 
-            case:
+            case False:
+                pass
             
             case _:
                 return None
