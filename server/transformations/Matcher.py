@@ -161,11 +161,16 @@ class Matcher(ast.NodeVisitor):
                     args=[_])):
                 return "collection_func", "update"
 
-
-
-            # 
-            case False:
-                pass
+            # del collection[x] or del collection[ast.Constant()]
+            # TODO: Add more granular strucural comparison to help
+            #       prevent improper code from being matched.
+            case ast.Delete(
+                targets=[
+                    ast.Subscript(
+                        value=ast.Name(),
+                        slice=ast.Name() | ast.Constant(),
+                        ctx=ast.Del())]):
+                return "collection_func", "delete"
 
             # 
             case False:
