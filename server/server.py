@@ -12,15 +12,16 @@ from flask_cors import CORS, cross_origin
 
 from transformations import Matcher
 from transformations import CollectionFuncs
+from transformations import ForLoop
 
 #from transformations import Lists
 #from transformations import FunctionDef
-#from transformations import ForLoop
 #from transformations import Dicts
 #from transformations import Sets
 #
 transformer_functions = {
-    "collection_func": CollectionFuncs.CollectionFuncsTransformations()
+    "collection_func": CollectionFuncs.CollectionFuncsTransformations(),
+    "forloop": ForLoop.ForLoopTransformer()
 }
 
 MATCHER = Matcher.Matcher()
@@ -38,6 +39,11 @@ def get_distractors():
 
     print(r_text, r_type, r_op)
 
+    if r_type in ["forloop", "if", "elif", "func_def"]:
+        r_text += " pass"
+
+    print(r_text)
+
     try:
         node = ast.parse(r_text.strip()).body[0]
         distractors = transformer_functions[r_type].gen_distractor(node, r_op)
@@ -54,9 +60,13 @@ def get_distractors():
 @cross_origin(methods=["GET"])
 def match_distractor():
 
-    r_text = request.args.get("text")
+    r_text = request.args.get("text").strip()
+
+    if r_text.startswith("for"):
+        r_text += " pass"
+
     try:
-        node = ast.parse(r_text.strip()).body[0]
+        node = ast.parse(r_text).body[0]
         result = MATCHER.match_operation(node)
     except Exception:
         result = None

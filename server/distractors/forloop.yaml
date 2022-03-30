@@ -7,7 +7,6 @@ Range:
   #Done
   OneArg:
     [
-      "for {iter_var} in range({end})",
       "for {iter_var} in range[{end}]",
       "for {iter_var} in range[{end}]:",
       "for {iter_var} in [{end}]:",
@@ -16,7 +15,6 @@ Range:
   #Done
   TwoArgs:
     [
-      "for {iter_var} in range({start}, {end})",
       "for {iter_var} in range({end}, {start}):",
       "for {iter_var} in range[{start}, {end}]",
       "for {iter_var} in range[{start}, {end}]:",
@@ -25,7 +23,6 @@ Range:
   #Done but not used yet
   ThreeArgs:
     [
-      "for {iter_var} in range({start}, {end}, {inc})",
       "for {iter_var} in range({end}, {start}, {inc}):",
       "for {iter_var} in range({start}, {inc}, {end}):",
       "for {iter_var} in range[{start}, {end}, {inc}]:",

@@ -12,6 +12,7 @@ class Matcher(ast.NodeVisitor):
 
             # {1, 2, 3, 4}
             case False:
+
                 return "collection_func", "set_literal"
 
             # [1, 2, 3, 4]
@@ -173,13 +174,69 @@ class Matcher(ast.NodeVisitor):
                 return "collection_func", "delete"
 
             # 
-            case False:
-                pass
+            case ast.Assign(
+                targets=[
+                    ast.Subscript(
+                        value=ast.Name(),
+                        slice=ast.Constant() | ast.Name(),
+                        ctx=ast.Store())],
+                value=ast.Constant() | ast.Name()):
+                return "collection_func", "addchangepair"
 
-            # 
-            case False:
-                pass
-            
+            # for i, item in enumerate(collection): pass
+            case ast.For(
+                    target=ast.Tuple(
+                        elts=[
+                            ast.Name(),
+                            ast.Name()],
+                        ctx=ast.Store()),
+                    iter=ast.Call(
+                        func=ast.Name(id='enumerate', ctx=ast.Load()),
+                        args=[ast.Name() | ast.Constant()],
+                        keywords=[]),
+                    body=[
+                        ast.Pass()]):
+
+                return "forloop", "enumerate"
+
+            # for num in range(end): pass
+            case ast.For(
+                    target=ast.Name(),
+                    iter=ast.Call(
+                        func=ast.Name(id='range', ctx=ast.Load()),
+                        args=[ast.Name() | ast.Constant() | ast.Call()],
+                        keywords=[]),
+                    body=[ast.Pass()]):
+
+                return "forloop", "range"
+
+            # for num in range(start, end): pass
+            case ast.For(
+                    target=ast.Name(),
+                    iter=ast.Call(
+                        func=ast.Name(),
+                        args=[
+                            ast.Name() | ast.Constant() | ast.Call(),
+                            ast.Name() | ast.Constant() | ast.Call()],
+                        keywords=[]),
+                    body=[
+                        ast.Pass()]):
+
+                return "forloop", "range"
+
+            # for num in range(start, end, stride): pass
+            case ast.For(
+                    target=ast.Name(),
+                    iter=ast.Call(
+                        func=ast.Name(id='range', ctx=ast.Load()),
+                        args=[
+                            ast.Name() | ast.Constant() | ast.Call(),
+                            ast.Name() | ast.Constant() | ast.Call(),
+                            ast.Name() | ast.Constant() | ast.Call()],
+                        keywords=[]),
+                    body=[ast.Pass()]):
+                return "forloop", "range"
+
             case _:
                 return None
 
