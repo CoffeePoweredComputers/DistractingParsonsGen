@@ -11,17 +11,19 @@ from flask import Flask, request
 from flask_cors import CORS, cross_origin
 
 from transformations import Matcher
+
 from transformations import CollectionFuncs
 from transformations import ForLoop
+from transformations import FunctionDef
 
 #from transformations import Lists
-#from transformations import FunctionDef
 #from transformations import Dicts
 #from transformations import Sets
 #
 transformer_functions = {
     "collection_func": CollectionFuncs.CollectionFuncsTransformations(),
-    "forloop": ForLoop.ForLoopTransformer()
+    "forloop": ForLoop.ForLoopTransformer(),
+    "func_def": FunctionDef.FunctionTransformer()
 }
 
 MATCHER = Matcher.Matcher()
@@ -62,8 +64,9 @@ def match_distractor():
 
     r_text = request.args.get("text").strip()
 
-    if r_text.startswith("for"):
+    if any(r_text.startswith(prefix) for prefix in ["for", "if", "elif", "def"]):
         r_text += " pass"
+
 
     try:
         node = ast.parse(r_text).body[0]

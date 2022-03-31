@@ -1,6 +1,7 @@
 Def : 
   [
     "{func_name}({args})",
+    "def {func_name}({args})",
     "{func_name}({args}):",
     "def {func_name}({args})",
   ]

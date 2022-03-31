@@ -173,7 +173,7 @@ class Matcher(ast.NodeVisitor):
                         ctx=ast.Del())]):
                 return "collection_func", "delete"
 
-            # 
+            # d[??] = ??
             case ast.Assign(
                 targets=[
                     ast.Subscript(
@@ -182,6 +182,10 @@ class Matcher(ast.NodeVisitor):
                         ctx=ast.Store())],
                 value=ast.Constant() | ast.Name()):
                 return "collection_func", "addchangepair"
+
+            # ########### #
+            #  For Loops  # 
+            # ########### #
 
             # for i, item in enumerate(collection): pass
             case ast.For(
@@ -236,6 +240,13 @@ class Matcher(ast.NodeVisitor):
                         keywords=[]),
                     body=[ast.Pass()]):
                 return "forloop", "range"
+
+            case ast.FunctionDef(
+                    name=_,
+                    args=_,
+                    body=[ast.Pass()]):
+                print("FUNCTION DEF FOUND")
+                return "func_def", "def"
 
             case _:
                 return None
