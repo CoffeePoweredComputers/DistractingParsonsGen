@@ -28,10 +28,10 @@ transformer_functions = {
 
 MATCHER = Matcher.Matcher()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../client/build', static_url_path='/')
 CORS(app, support_credentials=True)
 
-@app.route("/get_distractors")
+@app.route("/server/get_distractors")
 @cross_origin(methods=["GET"])
 def get_distractors():
 
@@ -58,7 +58,7 @@ def get_distractors():
         for distractor in distractors
         ]).encode("utf-8")
 
-@app.route("/match_distractor")
+@app.route("/server/match_distractor")
 @cross_origin(methods=["GET"])
 def match_distractor():
 
@@ -81,5 +81,3 @@ def match_distractor():
         }
 
 
-if __name__ == "__main__":
-    app.run(port=8000, debug=True)
