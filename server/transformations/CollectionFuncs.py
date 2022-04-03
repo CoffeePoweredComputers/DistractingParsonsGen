@@ -112,7 +112,7 @@ class CollectionFuncsTransformations(st.Transformer):
         distractor_templates = self.distractors["Index"]
 
         kwargs = {
-            "lst_name": node.value.func.value.id,
+            "lst_name": ast.unparse(node.value.func.value),
             "args": ast.unparse(node.value.args)
         }
 

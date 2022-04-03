@@ -38,7 +38,8 @@ CountAssign:
   ]
 Index:
   [
-    '{lst_name} = {lst_name}.extend({args})',
+    '{lst_name}.index({args})',
+    '{lst_name}.index[{args}]',
     '{lst_name} = {lst_name}.extend[{args}]',
     '{lst_name}.extend[{args}]',
     '{lst_name}.extend([{args}])',

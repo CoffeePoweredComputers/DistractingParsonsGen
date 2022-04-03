@@ -130,6 +130,7 @@ class Matcher(ast.NodeVisitor):
                         attr='index',
                         ctx=ast.Load()),
                     args=[_])):
+                print("AAAAAAAAAAAAAAAAAAAAAAAAAAAaa")
                 return "collection_func", "index"
 
             # collection.index(elem)

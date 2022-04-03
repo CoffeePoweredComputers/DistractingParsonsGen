@@ -1,0 +1,13 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    image: parsons-autogen-server
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    image: parsons-autogen-client
+    ports:
+      - "4000:80"
