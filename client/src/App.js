@@ -2,7 +2,6 @@ import React from 'react';
 import {
 	Navbar,
 	NavbarBrand,
-	NavbarText,
 	Row,
 	Col
 } from 'reactstrap';
@@ -29,7 +28,7 @@ export default class App extends React.Component{
 			tags: [],
 			blockInfo: [],
 			distractorSet: [],
-			selectedDistractors: []
+			activeParent: ""
 		}
 	}
 
@@ -51,7 +50,7 @@ export default class App extends React.Component{
 
 
     processText = async (newValue) => {
-        var blocks = [];
+        var blocks = {};
 		const lines = newValue.split('\n');
 		for(var i = 0; i < lines.length; i++){
 
@@ -62,18 +61,26 @@ export default class App extends React.Component{
 			} 
 
 			const indent_level = Math.floor(spaces/4);
-            const distractorData = await this.matchDistractor(lines[i].trim());
-            console.log(distractorData);
-			const data = {
-                    text: lines[i].trim(),
+			var distractorData = null;
+			if(lines[i].trim() in this.state.blockInfo){
+				const fields = this.state.blockInfo[lines[i].trim()];
+				distractorData = {
+					op: fields.op,
+					type: fields.type,
+					matchFound: fields.color == 'darkgreen'
+				}
+			} else{
+				distractorData = await this.matchDistractor(lines[i].trim());
+			}
+			blocks[lines[i].trim()] = {
                     op: distractorData.op,
-                    type: distractorData.type,
+					type: distractorData.type,
+					text: lines[i].trim(),
 					indent: indent_level,
-					position: blocks.length + 1,
-                    color:  distractorData.matchFound ? 'darkgreen' : 'grey',
+					position: i + 1,
+					color:  distractorData.matchFound ? 'darkgreen' : 'grey',
+					distractors: (lines[i].trim() in this.state.blockInfo) ? this.state.blockInfo[lines[i].trim()].distractors: [],
 					}
-
-			blocks.push(data);
 		}
 
 		this.setState({
@@ -83,7 +90,6 @@ export default class App extends React.Component{
 
 	getDistractors = (event) => {
 
-        console.log(event);
 		const requestParams = {
 			params : {
 				text: event.target.innerHTML,
@@ -93,34 +99,36 @@ export default class App extends React.Component{
 		};
 		
 		axios.get('http://localhost:8000/get_distractors', requestParams)
-			.then( (response) => this.setState({
-				distractorSet: response.data
+			.then((response) => this.setState({
+				distractorSet: response.data,
+				activeParent: event.target.innerHTML
 			})
 			)
 			.catch((error) => {
 				console.error(error);
 			});
-		
+
 		event.preventDefault();
 	}
 
 	addDistractor = (event) => {
-		
-        this.setState({
-            selectedDistractors: [...this.state.selectedDistractors, event.target.innerHTML]
-        });
 
+		var newBlockInfo = { ...this.state.blockInfo };
+		newBlockInfo[this.state.activeParent].distractors.push(event.target.innerHTML);
+		this.setState({
+			blockInfo: newBlockInfo
+		})			
 		event.preventDefault();
     }
 
 	removeDistractor = (event) => {
-		const blockIndex = event.target.getAttribute("pos");
-		var selectedDistractorsCopy = [ ...this.state.selectedDistractors ];
-		selectedDistractorsCopy.splice(blockIndex, 1)
-		this.setState({
-			selectedDistractors: selectedDistractorsCopy
+		//const blockIndex = event.target.getAttribute("pos");
+		//var selectedDistractorsCopy = [ ...this.state.selectedDistractors ];
+		//selectedDistractorsCopy.splice(blockIndex, 1)
+		//this.setState({
+		//	selectedDistractors: selectedDistractorsCopy
 
-		});
+		//});
 
 		event.preventDefault();
 	}
@@ -178,7 +186,6 @@ export default class App extends React.Component{
 						<ParsonsBlocks 
 							blockInfo={this.state.blockInfo} 
 							distractorSet={this.state.distractorSet} 
-							selectedDistractors={this.state.selectedDistractors} 
 							distractorSelector={this.getDistractors} 
 							addDistractor={this.addDistractor}
 							removeDistractor={this.removeDistractor}
@@ -193,8 +200,7 @@ export default class App extends React.Component{
 							title={this.state.title} 
 							topic={this.state.topic}
 							tags={this.state.tags} 
-							correct={this.state.blockInfo} 
-							distractors={this.state.selectedDistractors} 
+							blockInfo={this.state.blockInfo} 
 						/>
 					</center>
 				</Row>
