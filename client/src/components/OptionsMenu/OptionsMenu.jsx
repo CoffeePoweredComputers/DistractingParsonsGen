@@ -19,6 +19,10 @@ export default class OptionsMenu extends React.Component{
                     <Input type="text" name="title" id="title" placeholder="title here" onChange={this.props.setTitle} />
                 </FormGroup>
                 <FormGroup>
+                    <Label for="prompt">Prompt</Label>
+                    <Input type="text" name="prompt" id="prompt" placeholder="prompt here" onChange={this.props.setPrompt} />
+                </FormGroup>
+                <FormGroup>
                     <Label for="qid">QID</Label>
                     <Input type="text" name="qid" id="qid" placeholder="qid here" onChange={this.props.setQID} />
                 </FormGroup>

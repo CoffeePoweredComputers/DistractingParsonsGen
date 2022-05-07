@@ -23,6 +23,7 @@ export default class App extends React.Component{
 		super(props);
 		this.state = {
 			title: "",
+			prompt: "",
 			topic: "",
 			qid: "",
 			tags: [],
@@ -50,8 +51,10 @@ export default class App extends React.Component{
 
 
     processText = async (newValue) => {
+
         var blocks = {};
 		const lines = newValue.split('\n');
+
 		for(var i = 0; i < lines.length; i++){
 
 			const spaces = lines[i].search(/\S/);
@@ -62,16 +65,18 @@ export default class App extends React.Component{
 
 			const indent_level = Math.floor(spaces/4);
 			var distractorData = null;
+
 			if(lines[i].trim() in this.state.blockInfo){
 				const fields = this.state.blockInfo[lines[i].trim()];
 				distractorData = {
 					op: fields.op,
 					type: fields.type,
 					matchFound: fields.color == 'darkgreen'
-				}
+				};
 			} else{
 				distractorData = await this.matchDistractor(lines[i].trim());
 			}
+
 			blocks[lines[i].trim()] = {
                     op: distractorData.op,
 					type: distractorData.type,
@@ -80,7 +85,7 @@ export default class App extends React.Component{
 					position: i + 1,
 					color:  distractorData.matchFound ? 'darkgreen' : 'grey',
 					distractors: (lines[i].trim() in this.state.blockInfo) ? this.state.blockInfo[lines[i].trim()].distractors: [],
-					}
+					};
 		}
 
 		this.setState({
@@ -122,20 +127,28 @@ export default class App extends React.Component{
     }
 
 	removeDistractor = (event) => {
-		//const blockIndex = event.target.getAttribute("pos");
-		//var selectedDistractorsCopy = [ ...this.state.selectedDistractors ];
-		//selectedDistractorsCopy.splice(blockIndex, 1)
-		//this.setState({
-		//	selectedDistractors: selectedDistractorsCopy
-
-		//});
-
+		
+		const parentBlock = event.target.getAttribute("parentblock");
+		var newBlockInfo = { ...this.state.blockInfo };
+		var distractorIndex = newBlockInfo[parentBlock].distractors.indexOf(event.target.innerHTML);
+		newBlockInfo[parentBlock].distractors.splice(distractorIndex, 1);
+		this.setState({
+			blockInfo: newBlockInfo
+		})			
 		event.preventDefault();
+
 	}
 
 	setTitle = (event) => {
 		this.setState({
 			title: event.target.value.trim()
+		});
+		event.preventDefault();
+	}
+
+	setPrompt = (event) => {
+		this.setState({
+			prompt: event.target.value.trim()
 		});
 		event.preventDefault();
 	}
@@ -176,7 +189,8 @@ export default class App extends React.Component{
 					</Col>
 					<Col>
                         <OptionsMenu 
-                            setTitle={this.setTitle} 
+							setTitle={this.setTitle} 
+							setPrompt={this.setPrompt}
                             setTopic={this.setTopic} 
                             setQID={this.setQID} 
                             setTags={this.setTags}
@@ -198,6 +212,7 @@ export default class App extends React.Component{
 						<GeneratedProblem 
 							qid={this.state.qid} 
 							title={this.state.title} 
+							prompt={this.state.prompt}
 							topic={this.state.topic}
 							tags={this.state.tags} 
 							blockInfo={this.state.blockInfo} 

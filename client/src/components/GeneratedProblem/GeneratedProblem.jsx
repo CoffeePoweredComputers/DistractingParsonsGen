@@ -101,36 +101,37 @@ export default class GeneratedProblem extends Component {
 
 	}
 
-	/*generateRuneStoneOutput = () => {
+	generateRuneStoneOutput = () => {
 
-        this.props.correct.map( (field, id) => {
-            return( 
-                "    <pl-answer correct=\"true\" indent=\"" + 
-                field.indent.toString() + "\" ranking=\"" +
-                field.position.toString() +"\"> " + 
-                field.text + 
-                " </pl-answer>"
-                );
-        }).join("\n");
+		const blocks = Object.keys(this.props.blockInfo).map( (key) => {
 
-        // Generate the HTML
-        const correct = this.props.correct.map( (field, id) => {
-            return( 
-                "    <pl-answer correct=\"true\" indent=\"" + 
-                field.indent.toString() + "\" ranking=\"" +
-                field.position.toString() +"\"> " + 
-                field.text + 
-                " </pl-answer>"
-                );
-        }).join("\n");
+			const block = this.props.blockInfo[key];
 
-        const distractors = this.props.distractors.map( (x) => {
-            return( 
-                "    <pl-answer correct=\"false\"> " + x + " </pl-answer>"
-                );
-        }).join("\n");
+			const elements = [
+				"    ".repeat( 1 + block.indent) + 
+                block.text
+			];
 
-		const generatedHTML = "<pl-parsons-blocks answers-name=\"answers\" indentation=true grading-method=\"ranking\">\n"  + correct + "\n" + distractors + "\n</pl-parsons-blocks>"
+			if(block.distractors.length > 0){
+				const formattedDistractors = block.distractors.map( (distractor) => {
+					return(
+						"    ".repeat( 1 + block.indent) + 
+						block.text + 
+						" #distractor"
+					);
+				});
+				elements.push(...formattedDistractors);
+			}
+
+			return(elements.join("\n    =====\n"));
+		}).join("\n    =====\n");
+
+		const generatedMarkdown = [
+			`.. parsonsprob:: ${this.props.title}\n`,
+			`    ${this.props.prompt}`,
+			"    -----",
+			blocks 
+		].join("\n");
 
 		return(
 			<React.Fragment>
@@ -142,14 +143,12 @@ export default class GeneratedProblem extends Component {
 					mode='html'
 					name='UNIQUE_ID_OF_DIV1'
 					splits={1} 
-					value={[generatedHTML]}
+					value={[generatedMarkdown]}
 					editorProps={{ $blockScrolling: true }}
 				/>
 			</React.Fragment>
 		);
-
-
-	}*/
+	}
 
 
     // Render editor
@@ -157,7 +156,7 @@ export default class GeneratedProblem extends Component {
 
 		const outputMap = {
 			"PrairieLearn": this.generatePrairieLearnOutput,
-			//"RuneStone": this.generateRuneStoneOutput,
+			"RuneStone": this.generateRuneStoneOutput,
 			null: () => {}
 		}
 
