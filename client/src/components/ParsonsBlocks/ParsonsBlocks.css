@@ -2,3 +2,8 @@
     width: 100%;
     overflow-y: scroll
 }
+
+.block-set-sep{
+    color: black;
+    font-size: larger;
+}

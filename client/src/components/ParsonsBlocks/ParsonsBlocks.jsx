@@ -12,13 +12,11 @@ import axios from 'axios';
  */
 export default class ParsonsBlocks extends Component {
 
-
 	
     // Render editor
     render(){
-		
-		const blocks = this.props.blockInfo.map( (fields) => {
-			console.log(fields);
+		const blocks = Object.keys(this.props.blockInfo).map( (key) => {
+			const fields = this.props.blockInfo[key];
 			return( 
 				<React.Fragment>
                     <Block 
@@ -40,6 +38,7 @@ export default class ParsonsBlocks extends Component {
 				<React.Fragment>
                     <Block 
 						type="distractorOption"
+						parentBlock={fields.parentBlock}
 						color='grey'
 						indent={0} 
 						text={fields.text} 
@@ -50,19 +49,34 @@ export default class ParsonsBlocks extends Component {
 				);
         });
 
-		const selected = this.props.selectedDistractors.map( (text, i) => {
-			return( 
-				<React.Fragment>
-                    <Block 
-						type="distractorSelected"
-						color='grey'
-                        indent={0} 
-                        text={text} 
-						pos={i}
-                        clickHandler={this.props.removeDistractor} 
-                    />
-				</React.Fragment>
+		const selected = Object.keys(this.props.blockInfo).map( (key) => {
+
+			var fields = this.props.blockInfo[key];
+
+			if(fields.distractors.length > 0){
+				return (
+					<React.Fragment>
+						<div className="block-set-sep"> {key} </div>
+						<div>
+							{
+								fields.distractors.map((text, i) => {
+									return (
+										<Block
+											type="distractorSelected"
+											parentBlock={key}
+											color='grey'
+											indent={0}
+											text={text}
+											pos={i}
+											clickHandler={this.props.removeDistractor}
+										/>);
+								})
+							}
+						</div>
+					</React.Fragment>
 				);
+
+			}
 		});
 
 		return(
