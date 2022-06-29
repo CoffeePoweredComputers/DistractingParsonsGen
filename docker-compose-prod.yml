@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.server
+      target: production
     image: parson-autogen-server
     ports:
       - "5000:5000"

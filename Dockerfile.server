@@ -1,9 +1,18 @@
-FROM python:3.10
+FROM python:3.10 as build-server
 WORKDIR /app
 
-ADD server/ ./
+COPY server/ /app/
 RUN pip install -r ./requirements.txt
-ENV FLASK_ENV production
 
+
+FROM build-server as debug
 EXPOSE 5000
+ENV FLASK_ENV development
+ENV FLASK_DEBUG 1
+
+FROM build-server as production
+EXPOSE 5000
+ENV FLASK_ENV production
 CMD ["gunicorn", "-b", ":5000", "server:app"]
+
+

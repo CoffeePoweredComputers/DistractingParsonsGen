@@ -41,7 +41,7 @@ export default class App extends React.Component{
 			}
 		};
 
-		return await axios.get('http://localhost:8000/match_distractor', requestParams)
+		return await axios.get('/server/match_distractor', requestParams)
 			.then( (response) => response.data )
 			.catch((error) => {
 				console.error(error);
@@ -103,7 +103,7 @@ export default class App extends React.Component{
 			}
 		};
 		
-		axios.get('http://localhost:8000/get_distractors', requestParams)
+		axios.get('/server/get_distractors', requestParams)
 			.then((response) => this.setState({
 				distractorSet: response.data,
 				activeParent: event.target.innerHTML
