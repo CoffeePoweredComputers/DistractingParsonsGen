@@ -5,11 +5,10 @@ ListCreate:
   ]
 Append: 
   [
-    '{lst_name} = {lst_name}.append({args})',
-    '{lst_name} = {lst_name}.append[{args}]',
-    '{lst_name}.append[{args}]',
-    '{lst_name}.append([{args}])',
-    '{lst_name}.add({args})'
+  '{lst_name} += {args}',
+  '{lst_name}.add({args})',
+  '{lst_name}.insert({args})',
+  '{lst_name}.append[{args}]'
   ]
 Extend:
   [
@@ -29,12 +28,10 @@ CountExpr:
   ]
 CountAssign:
   [
-    '{count_elem} = {lst_name}.count({elem})',
-    '{lst_name}.count({elem})',
-    '{count_elem} = {lst_name}.count[{elem}]',
-    '{count_elem} = len({lst_name}.count({elem}))',
-    '{count_elem} = {lst_name}.len({elem})',
-    '{count_elem} = {lst_name}({elem})'
+    '{count_elem} = {lst_name}.count',
+    '{count_elem} = {lst_name}({elem})',
+    '{count_elem} = {lst_name}[{elem}]',
+    '{count_elem} = {lst_name}.count[{elem}]'
   ]
 Index:
   [
@@ -69,9 +66,8 @@ Remove:
   # TODO: finish adding a few more
   [
     '{collection_name}.remove[{args}]',
-    'remove({collection_name}, {args})',
-    'remove.{collection_name}({args})',
-    '{collection_name}.remove[{args}]',
+    'del {collection_name}[{args}]',
+    '{collection_name}.pop[{args}]',
     '{collection_name}.pop({args})'
   ]
 

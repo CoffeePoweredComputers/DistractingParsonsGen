@@ -16,7 +16,6 @@ class CollectionFuncsTransformations(st.Transformer):
             "setcreate": self.set_create_transform,
             "add": self.add_transform,
             "union": self.union_transform,
-            "remove": self.remove_transform,
 
             # Dict
             "dictcreate": self.dict_create_transform,
@@ -203,9 +202,11 @@ class CollectionFuncsTransformations(st.Transformer):
         distractor_templates = self.distractors["Remove"]
 
         kwargs = {
-            "collection_name": node.value.func.value.id,
+            "collection_name": ast.unparse(node.value.func.value),
             "args": ast.unparse(node.value.args)
         }
+
+        print(kwargs)
 
         return self.format_distractors(distractor_templates, **kwargs)
 
@@ -344,24 +345,24 @@ class CollectionFuncsTransformations(st.Transformer):
 
         return self.format_distractors(distractor_templates, **kwargs)
 
-    def remove_transform(self, node) -> list:
-        """[summary]
+    #def remove_transform(self, node) -> list:
+    #    """[summary]
 
-        Args:
-            node (ast.Expr): 
+    #    Args:
+    #        node (ast.Expr): 
 
-        Returns:
-            list: [description]
-        """
+    #    Returns:
+    #        list: [description]
+    #    """
 
-        distractor_templates = self.distractors["Remove"]
+    #    distractor_templates = self.distractors["Remove"]
 
-        kwargs = {
-            "set_name": ast.unparse(node.value.func.value),
-            "args": ast.unparse(node.value.args[0])
-        }
+    #    kwargs = {
+    #        "set_name": ast.unparse(node.value.func.value),
+    #        "args": ast.unparse(node.value.args[0])
+    #    }
 
-        return self.format_distractors(distractor_templates, **kwargs)
+    #    return self.format_distractors(distractor_templates, **kwargs)
 
 
     def union_transform(self, node) -> list:
@@ -443,25 +444,6 @@ class CollectionFuncsTransformations(st.Transformer):
         """
 
         distractor_templates = self.distractors["Add"]
-
-        kwargs = {
-            "set_name": ast.unparse(node.value.func.value),
-            "args": ast.unparse(node.value.args[0])
-        }
-
-        return self.format_distractors(distractor_templates, **kwargs)
-
-    def remove_transform(self, node) -> list:
-        """[summary]
-
-        Args:
-            node (ast.Expr): 
-
-        Returns:
-            list: [description]
-        """
-
-        distractor_templates = self.distractors["Remove"]
 
         kwargs = {
             "set_name": ast.unparse(node.value.func.value),
