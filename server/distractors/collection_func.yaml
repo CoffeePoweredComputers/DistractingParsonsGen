@@ -1,88 +1,75 @@
 ListCreate: 
   [
     '{lst_name} = {{{elems}}}', 
-    '{lst_name} = ({elems})',
+    '{lst_name} = ({elems})'
   ]
+
+# lst_name -> The name of the list to which we are appending.
+# val -> The value we are appending to the list.
 Append: 
   [
-    '{lst_name} = {lst_name}.append({args})',
-    '{lst_name} = {lst_name}.append[{args}]',
-    '{lst_name}.append[{args}]',
-    '{lst_name}.append([{args}])',
-    '{lst_name}.add({args})'
+    '{lst_name}.add({val})',
+    '{lst_name}.append[{val}]'
   ]
+
+# lst_name -> The name of the list to which we are appending.
+# val -> The value we are appending to the list.
 Extend:
   [
-    '{lst_name} = {lst_name}.extend({args})',
-    '{lst_name} = {lst_name}.extend[{args}]',
-    '{lst_name}.extend[{args}]',
-    '{lst_name}.extend([{args}])',
-    '{lst_name}.add({args})'
-  ]
-CountExpr:
-  [
-    '{lst_name}.count({elem})',
-    '{lst_name}.count[{elem}]',
-    'len({lst_name}.count({elem}))',
-    '{lst_name}.len({elem})',
-    '{lst_name}({elem})'
-  ]
-CountAssign:
-  [
-    '{count_elem} = {lst_name}.count({elem})',
-    '{lst_name}.count({elem})',
-    '{count_elem} = {lst_name}.count[{elem}]',
-    '{count_elem} = len({lst_name}.count({elem}))',
-    '{count_elem} = {lst_name}.len({elem})',
-    '{count_elem} = {lst_name}({elem})'
-  ]
-Index:
-  [
-    '{lst_name}.index({args})',
-    '{lst_name}.index[{args}]',
-    '{lst_name} = {lst_name}.extend[{args}]',
-    '{lst_name}.extend[{args}]',
-    '{lst_name}.extend([{args}])',
-    '{lst_name}.add({args})'
+
   ]
 
-Pop:
+Count:
+  # collection_name -> The name of the tuple or list we are counting elements in.
+  # val -> The value we are counting instances of.
   Expr:
     [
-      '{collection_name}.pop[{param}]',
-      'pop({collection_name}, {param})',
-      'pop.collection_name({param})',
-      '{collection_name}.remove[{param}]',
-      '{collection_name}.remove({param})'
+
     ]
+  # collection_name -> The name of the tuple or list we are counting elements in.
+  # val -> The value we are counting instances of.
+  # var -> The variable we are storing the result of the expression into.
   Assign:
-    # TODO: finish adding a few more
     [
-      '{elem_name} = {collection_name}.pop[{param}]',
-      '{elem_name} = pop({collection_name}, {param})',
-      '{elem_name} = pop.{collection_name}({param})',
-      '{elem_name} = {collection_name}.remove[{param}]',
-      '{elem_name} = {collection_name}.remove({param})'
+      '{var} = {collection_name}({val})'
+    ]
+Index:
+  # collection_name -> The name of the tuple or list we are counting elements in.
+  # val -> The value we are counting instances of.
+  # var -> The variable we are storing the result of the expression into.
+  Assign:
+    [
+      '{var} = {collection_name}[{val}]'
     ]
 
+Pop:
+  # collection_name -> The list or dictionary we are modifying
+  # key -> the index or key we are poping from the collection
+  Expr:
+    [
+      '{collection_name}.remove({key})'
+    ]
+  # collection_name -> The list or dictionary we are modifying.
+  # key -> The index or key we are poping from the collection.
+  # elem -> The element that got removed from the collection.
+  Assign:
+    [
+
+    ]
+
+# collection_name -> The name of the list or dictionary
+# val -> The value we are removing from the collection
 Remove:
-  # TODO: finish adding a few more
   [
-    '{collection_name}.remove[{args}]',
-    'remove({collection_name}, {args})',
-    'remove.{collection_name}({args})',
-    '{collection_name}.remove[{args}]',
-    '{collection_name}.pop({args})'
+      '{collection_name}.pop({val})'
   ]
 
+# list_name -> The name of the list being operated on
+# pos -> The index where we are inserting
+# val -> The value we are inserting
 Insert:
   [
-    "{list_name}[{pos}] = {val}",
-    "list_name = {list_name}.insert({pos}, {val})",
-    "list_name = {list_name}.insert[{pos}, {val}]",
-    "{list_name}.insert({val}, {pos})",
-    "{list_name}[{pos}].append({val})",
-    "{list_name}[{pos}].insert({val})"
+
   ]
 Reverse:
   [
@@ -96,27 +83,24 @@ Sorted:
 SortReverse:
   [
   ]
-
-DictCreate:
-  Empty:
-    [
-      "{var_name} = []",
-      "{var_name} = ()"
-    ]
-  NonEmpty:
-    [
-      [":", "{var_name} = dict{{{args}}}"],
-      ["=", "{var_name} = {{{args}}}"],
-      ["=", "{var_name} = [{args}]"],
-      [":", "{var_name} = {{{args}}}"],
-      [":", "{var_name} = [{args}]"],
-      [",", "{var_name} = {{{args}}}"],
-      [",", "{var_name} = [{args}]"]
-    ]
-
+Empty:
+  [
+    "{var_name} = []",
+    "{var_name} = ()"
+  ]
+NonEmpty:
+  [
+    [":", "{var_name} = dict{{{args}}}"],
+    ["=", "{var_name} = {{{args}}}"],
+    ["=", "{var_name} = [{args}]"],
+    [":", "{var_name} = {{{args}}}"],
+    [":", "{var_name} = [{args}]"],
+    [",", "{var_name} = {{{args}}}"],
+    [",", "{var_name} = [{args}]"]
+  ]
 Delete:
-  # var - name of the dictionary
-  # key - the key:value pair we want to remove
+  # var -> name of the dictionary
+  # key -> the key:value pair we want to remove
   [
     "{var_name}.del[{key}]",
     "{var_name}.del({key})",
@@ -127,6 +111,9 @@ Delete:
   ]
 
 AddChangePair:
+  # var -> name of the dictionary
+  # key -> the key we are updating/adding
+  # value -> the value we are updating/adding
   [
     "{var_name} = {{{key}, {value}}}", #assertion
     "{var_name} = {{{key}: {value}}}", #assertion
