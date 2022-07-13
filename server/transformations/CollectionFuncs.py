@@ -208,6 +208,8 @@ class CollectionFuncsTransformations(st.Transformer):
             "val": ast.unparse(node.value.args)
         }
 
+        print(kwargs)
+
         return self.format_distractors(distractor_templates, **kwargs)
 
 
