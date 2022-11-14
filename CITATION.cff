@@ -3,6 +3,8 @@ message: "If you use this software, please cite it as below."
 authors:
   - family-names: Smith
     given-names: David
+    middle-names: Hamilton
+    suffix: IV
     orcid: https://orcid.org/0000-0002-6572-4347
 title: "DistractingParsonsGen - A Parsons Problem + Distractor Generator"
 version: 2.0.4
