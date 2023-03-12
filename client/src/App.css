@@ -43,8 +43,26 @@
     display: flex;
 }
 
-.editor{
+.ace_editor{
+    border-radius: 10px;
 }
 
 .cards{
+}
+
+.row-element{
+    padding: 10px;
+}
+
+.divider{
+    background-color: rgba(var(--bs-light-rgb),var(--bs-bg-opacity)) !important;
+}
+
+.scroll{
+    background-color: white;
+    border: solid black;
+    border-radius: 10px;
+    overflow-y: auto;
+    max-height: 500px;
+    width: 500px;
 }

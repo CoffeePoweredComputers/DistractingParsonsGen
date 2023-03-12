@@ -9,6 +9,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
+
 import OptionsMenu from "./components/OptionsMenu/OptionsMenu.jsx";
 import TextEditor from "./components/TextEditor/TextEditor.jsx";
 import ParsonsBlocks from "./components/ParsonsBlocks/ParsonsBlocks.jsx";
@@ -40,8 +41,7 @@ export default class App extends React.Component{
 				text: line
 			}
 		};
-
-		return await axios.get('/server/match_distractor', requestParams)
+        return await axios.get('http://localhost:5000/server/match_distractor', requestParams)
 			.then( (response) => response.data )
 			.catch((error) => {
 				console.error(error);
@@ -71,13 +71,13 @@ export default class App extends React.Component{
 				distractorData = {
 					op: fields.op,
 					type: fields.type,
-					matchFound: fields.color == 'darkgreen'
+					matchFound: fields.color === 'darkgreen'
 				};
 			} else{
 				distractorData = await this.matchDistractor(lines[i].trim());
 			}
 
-			blocks[lines[i].trim()] = {
+            blocks[lines[i].trim()] = {
                     op: distractorData.op,
 					type: distractorData.type,
 					text: lines[i].trim(),
@@ -103,7 +103,7 @@ export default class App extends React.Component{
 			}
 		};
 		
-		axios.get('/server/get_distractors', requestParams)
+        axios.get('http://localhost:5000/server/get_distractors', requestParams)
 			.then((response) => this.setState({
 				distractorSet: response.data,
 				activeParent: event.target.innerHTML
@@ -116,28 +116,23 @@ export default class App extends React.Component{
 		event.preventDefault();
 	}
 
-	addDistractor = (event) => {
+    toggleDistractor = (event) => {
 
-		var newBlockInfo = { ...this.state.blockInfo };
-		newBlockInfo[this.state.activeParent].distractors.push(event.target.innerHTML);
-		this.setState({
-			blockInfo: newBlockInfo
-		})			
+        var newBlockInfo = { ...this.state.blockInfo };
+        console.log(this.state.blockInfo[this.state.activeParent]);
+        if(newBlockInfo[this.state.activeParent].distractors.includes(event.target.innerHTML)){
+            var distractorIndex = newBlockInfo[this.state.activeParent].distractors.indexOf(event.target.innerHTML);
+            newBlockInfo[this.state.activeParent].distractors.splice(distractorIndex, 1);
+        } else{
+            newBlockInfo[this.state.activeParent].distractors.push(event.target.innerHTML);
+        }
+        this.setState({
+            blockInfo: newBlockInfo
+        })			
 		event.preventDefault();
+
     }
 
-	removeDistractor = (event) => {
-		
-		const parentBlock = event.target.getAttribute("parentblock");
-		var newBlockInfo = { ...this.state.blockInfo };
-		var distractorIndex = newBlockInfo[parentBlock].distractors.indexOf(event.target.innerHTML);
-		newBlockInfo[parentBlock].distractors.splice(distractorIndex, 1);
-		this.setState({
-			blockInfo: newBlockInfo
-		})			
-		event.preventDefault();
-
-	}
 
 	setTitle = (event) => {
 		this.setState({
@@ -172,7 +167,18 @@ export default class App extends React.Component{
 			tags: event.target.value.split(",").map( (x) => x.trim() )
 		});
 		event.preventDefault();
-	}
+    }
+    /*
+    <Col>
+        <OptionsMenu 
+            setTitle={this.setTitle} 
+            setPrompt={this.setPrompt}
+            setTopic={this.setTopic} 
+            setQID={this.setQID} 
+            setTags={this.setTags}
+        />
+    </Col>
+    */
 
 	render(){
 
@@ -180,33 +186,26 @@ export default class App extends React.Component{
 			<React.Fragment>
 				<Navbar color="dark" dark expand="md" light >
 					<NavbarBrand href="/">
-						Parson's Problem: Automatic Distractor Gen
+						Parsons Problem: Automatic Distractor Generator
 					</NavbarBrand>
 				</Navbar>
-				<Row className="bg-light border">
-					<Col className="editor">
+				<Row className="bg-light border row-element">
+					<Col md={{size: 4, offset: 2 }} className="editor">
                         <TextEditor updateTextInfo={this.processText} />
-					</Col>
-					<Col>
-                        <OptionsMenu 
-							setTitle={this.setTitle} 
-							setPrompt={this.setPrompt}
-                            setTopic={this.setTopic} 
-                            setQID={this.setQID} 
-                            setTags={this.setTags}
-                        />
-					</Col>
+                    </Col>
+                    <Col md={{size: 3, offset: 1 }} className="scroll">
 					<DndProvider backend={HTML5Backend}>
 						<ParsonsBlocks 
 							blockInfo={this.state.blockInfo} 
 							distractorSet={this.state.distractorSet} 
 							distractorSelector={this.getDistractors} 
-							addDistractor={this.addDistractor}
-							removeDistractor={this.removeDistractor}
+							toggleDistractor={this.toggleDistractor}
 						/>
-					</DndProvider>
-				</Row>
-				<Row className="bg-light border">
+                        </DndProvider>
+                    </Col>
+                </Row>
+                <hr className="divider"/>
+				<Row className="bg-light border row-element">
 					<center>
 						<h2> Generated Problem </h2>
 						<GeneratedProblem 

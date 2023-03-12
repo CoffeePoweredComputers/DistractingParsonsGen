@@ -7,3 +7,23 @@
     color: black;
     font-size: larger;
 }
+
+/* Custom styles to reduce padding */
+
+.accordion-header {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+.accordion-button {
+    padding: 0px;
+    background: transparent !important;/*#333;*/
+}
+
+.blocks{
+    width: 100%
+}
+
+.row{
+  --bs-gutter-x: 0rem;
+}
