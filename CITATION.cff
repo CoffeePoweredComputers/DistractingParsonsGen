@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Smith
+    given-names: David
+    middle-names: Hamilton
+    name-suffix: IV
+    email: dhsmith2@illinois.edu
+    orcid: https://orcid.org/0000-0002-6572-4347
+title: "DistractingParsonsGen - A Parsons Problem + Distractor Generator"
+date-released: 2022-11-14

@@ -94,7 +94,8 @@ export default class GeneratedProblem extends Component {
 			mode='html'
 			name='UNIQUE_ID_OF_DIV1'
 			splits={2} 
-			value={[infoJson, generatedHTML]}
+            value={[infoJson, generatedHTML]}
+            readOnly={true}
 			editorProps={{ $blockScrolling: true }}
 		/>);
 
@@ -138,7 +139,7 @@ export default class GeneratedProblem extends Component {
 				<SplitEditor
 					width='1500px'
 					height='400px'
-					theme='tomorrow'
+					theme='twilight'
 					fontSize='10pt'
 					mode='html'
 					name='UNIQUE_ID_OF_DIV1'

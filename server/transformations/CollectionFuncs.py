@@ -16,7 +16,6 @@ class CollectionFuncsTransformations(st.Transformer):
             "setcreate": self.set_create_transform,
             "add": self.add_transform,
             "union": self.union_transform,
-            "remove": self.remove_transform,
 
             # Dict
             "dictcreate": self.dict_create_transform,
@@ -74,7 +73,7 @@ class CollectionFuncsTransformations(st.Transformer):
 
         kwargs = {
             "lst_name": node.value.func.value.id,
-            "args": ast.unparse(node.value.args)
+            "val": ast.unparse(node.value.args)
         } 
 
         return self.format_distractors(distractor_templates, **kwargs)
@@ -94,7 +93,7 @@ class CollectionFuncsTransformations(st.Transformer):
 
         kwargs = {
             "lst_name": node.value.func.value.id,
-            "args": ast.unparse(node.value.args)
+            "val": ast.unparse(node.value.args)
         }
 
         return self.format_distractors(distractor_templates, **kwargs)
@@ -109,12 +108,14 @@ class CollectionFuncsTransformations(st.Transformer):
             list: [description]
         """
 
-        distractor_templates = self.distractors["Index"]
+        distractor_templates = self.distractors["Index"]["Assign"]
 
-        kwargs = {
-            "lst_name": ast.unparse(node.value.func.value),
-            "args": ast.unparse(node.value.args)
-        }
+        if type(node) is ast.Assign:
+            kwargs = {
+                "var": node.targets[0].id,
+                "collection_name": ast.unparse(node.value.func.value),
+                "val": ast.unparse(node.value.args[0]),
+            }
 
         return self.format_distractors(distractor_templates, **kwargs)
 
@@ -125,19 +126,19 @@ class CollectionFuncsTransformations(st.Transformer):
         Returns:
             list: [description]
         """
-        print(type(node) is ast.Expr)
+
         if type(node) is ast.Assign:
-            distractor_templates = self.distractors["CountAssign"]
+            distractor_templates = self.distractors["Count"]["Assign"]
             kwargs = {
-                "count_elem": node.targets[0].id,
-                "lst_name": node.value.func.value.id,
-                "elem": ast.unparse(node.value.args[0]),
+                "var": node.targets[0].id,
+                "collection_name": node.value.func.value.id,
+                "val": ast.unparse(node.value.args[0]),
             }
         elif type(node) is ast.Expr:
-            distractor_templates = self.distractors["CountExpr"]
+            distractor_templates = self.distractors["Count"]["Expr"]
             kwargs = {
-                "lst_name": node.value.func.value.id,
-                "elem": ast.unparse(node.value.args[0]),
+                "collection_name": node.value.func.value.id,
+                "val": ast.unparse(node.value.args[0]),
             }
 
 
@@ -155,15 +156,15 @@ class CollectionFuncsTransformations(st.Transformer):
         if type(node) is ast.Assign:
             distractor_templates = self.distractors["Pop"]["Assign"]
             kwargs = {
-                "elem_name": node.targets[0].id,
+                "elem": node.targets[0].id,
                 "collection_name": node.value.func.value.id,
-                "param": ast.unparse(node.value.args[0]),
+                "key": ast.unparse(node.value.args[0]),
             }
         elif type(node) is ast.Expr:
             distractor_templates = self.distractors["Pop"]["Expr"]
             kwargs = {
                 "collection_name": node.value.func.value.id,
-                "param": ast.unparse(node.value.args[0]),
+                "key": ast.unparse(node.value.args[0]),
             }
         else:
             raise ValueError("{ast.unparse(node)} is not a valid formation of the pop statement/expression")
@@ -204,8 +205,10 @@ class CollectionFuncsTransformations(st.Transformer):
 
         kwargs = {
             "collection_name": node.value.func.value.id,
-            "args": ast.unparse(node.value.args)
+            "val": ast.unparse(node.value.args)
         }
+
+        print(kwargs)
 
         return self.format_distractors(distractor_templates, **kwargs)
 
@@ -344,26 +347,6 @@ class CollectionFuncsTransformations(st.Transformer):
 
         return self.format_distractors(distractor_templates, **kwargs)
 
-    def remove_transform(self, node) -> list:
-        """[summary]
-
-        Args:
-            node (ast.Expr): 
-
-        Returns:
-            list: [description]
-        """
-
-        distractor_templates = self.distractors["Remove"]
-
-        kwargs = {
-            "set_name": ast.unparse(node.value.func.value),
-            "args": ast.unparse(node.value.args[0])
-        }
-
-        return self.format_distractors(distractor_templates, **kwargs)
-
-
     def union_transform(self, node) -> list:
         """[summary]
 
@@ -443,25 +426,6 @@ class CollectionFuncsTransformations(st.Transformer):
         """
 
         distractor_templates = self.distractors["Add"]
-
-        kwargs = {
-            "set_name": ast.unparse(node.value.func.value),
-            "args": ast.unparse(node.value.args[0])
-        }
-
-        return self.format_distractors(distractor_templates, **kwargs)
-
-    def remove_transform(self, node) -> list:
-        """[summary]
-
-        Args:
-            node (ast.Expr): 
-
-        Returns:
-            list: [description]
-        """
-
-        distractor_templates = self.distractors["Remove"]
 
         kwargs = {
             "set_name": ast.unparse(node.value.func.value),
