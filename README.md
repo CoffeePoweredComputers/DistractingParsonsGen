@@ -1,4 +1,4 @@
-![imgs/dashboard.png](thedahsboard)
+![alt](https://github.com/CoffeePoweredComputers/DistractingParsonsGen/blob/master/imgs/dashboard.png)
 
 To build the app run:
 ```bash
