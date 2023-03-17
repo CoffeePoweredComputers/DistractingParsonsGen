@@ -16,3 +16,5 @@ docker-compose -f docker-compose-prod.yml up
 ```
 
 The `-b` can be added to run the container in detached mode.
+
+The live version can be accessed at the following link: [DistractingParsonsGen](http://18.119.102.53:3000/)
