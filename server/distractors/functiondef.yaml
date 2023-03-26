@@ -4,6 +4,10 @@ Def :
     "def {func_name}({args})",
     "{func_name}({args}):",
     "def {func_name}({args})",
+    "Def {func_name}({args}):",
+    "def {func_name}[{args}]",
+    "Def {func_name}({args})",
+    "DEF {func_name}[{args}]"
   ]
 
 Args :
